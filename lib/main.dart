@@ -1,13 +1,19 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'design.dart';
+import 'screen/result.dart';
 
-const labelTextStyle = TextStyle(
-  fontSize: 18.0,
-  color: Colors.white,
-);
+int height = 170;
+int weight = 75;
+int age = 20;
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -18,99 +24,260 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  Color maleCardColor = inactiveColor;
+  Color femaleCardColor = inactiveColor;
+  void updateColor(int gender) {
+    if (gender == 1) {
+      if (maleCardColor == inactiveColor) {
+        maleCardColor = activeColor;
+        femaleCardColor = inactiveColor;
+      } else {
+        maleCardColor = inactiveColor;
+      }
+    }
+
+    //female card pressed
+    if (gender == 2) {
+      if (femaleCardColor == inactiveColor) {
+        femaleCardColor = activeColor;
+        maleCardColor = inactiveColor;
+      } else {
+        femaleCardColor = inactiveColor;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(brightness: Brightness.dark),
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.black,
           title: Text(
             "BMI Calculator",
+            textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.orange,
+              color: Color(0xFF00838F),
             ),
           ),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: <Widget>[
             Expanded(
-              child: Container(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {});
-                        },
-                        child: reusableContainer(
-                          cardChild: iconwidget(
-                            reusableIcon: FontAwesomeIcons.venus,
-                            iconlabel: 'Male',
-                          ),
-                          backGroundColor: Colors.grey,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          updateColor(1);
+                        });
+                      },
+                      child: reusableContainer(
+                        cardChild: iconwidget(
+                          reusableIcon: FontAwesomeIcons.venus,
+                          iconlabel: 'Male',
                         ),
+                        backGroundColor: maleCardColor,
                       ),
                     ),
-                    Expanded(
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          updateColor(2);
+                        });
+                      },
                       child: reusableContainer(
-                        backGroundColor: Colors.grey,
+                        backGroundColor: femaleCardColor,
                         cardChild: iconwidget(
                           reusableIcon: FontAwesomeIcons.venus,
                           iconlabel: 'Female',
                         ),
                       ),
                     ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: reusableContainer(
+                backGroundColor: inactiveColor,
+                cardChild: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Select Height",
+                      style: labelTextStyle,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: <Widget>[
+                        Text(
+                          height.toString(),
+                          style: numberHeight,
+                        ),
+                        Text(
+                          "CM",
+                          style: labelTextStyle,
+                        ),
+                      ],
+                    ),
+                    Slider(
+                      value: height.toDouble(),
+                      onChanged: (double changeHeight) {
+                        setState(() {
+                          height = changeHeight.round();
+                        });
+                      },
+                      min: 120.0,
+                      max: 220.0,
+                    )
                   ],
                 ),
               ),
             ),
             Expanded(
-              child: Container(
-                margin: EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: reusableContainer(
-                        backGroundColor: Colors.grey,
-                        cardChild: Container(),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: reusableContainer(
+                      backGroundColor: inactiveColor,
+                      cardChild: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Weight",
+                            style: labelTextStyle,
+                          ),
+                          Text(
+                            weight.toString(),
+                            style: numberHeight,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              buttonPlusminus(
+                                iconPlusminus: FontAwesomeIcons.minus,
+                                onPress: () {
+                                  setState(() {
+                                    weight--;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              buttonPlusminus(
+                                iconPlusminus: FontAwesomeIcons.plus,
+                                onPress: () {
+                                  setState(() {
+                                    weight++;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.all(15),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: reusableContainer(
-                        backGroundColor: Colors.grey,
-                        cardChild: Container(),
+                  ),
+                  Expanded(
+                    child: reusableContainer(
+                      backGroundColor: inactiveColor,
+                      cardChild: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Age",
+                            style: labelTextStyle,
+                          ),
+                          Text(
+                            age.toString(),
+                            style: numberHeight,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              buttonPlusminus(
+                                iconPlusminus: FontAwesomeIcons.minus,
+                                onPress: () {
+                                  setState(() {
+                                    age--;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              buttonPlusminus(
+                                iconPlusminus: FontAwesomeIcons.plus,
+                                onPress: () {
+                                  setState(() {
+                                    age++;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    Expanded(
-                      child: reusableContainer(
-                        backGroundColor: Colors.grey,
-                        cardChild: Container(),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             Container(
               margin: EdgeInsets.only(top: 10.0),
-              color: Colors.orange,
+              color: activeColor,
               height: 80.0,
               width: double.infinity,
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                      builder: (context) => new result(),
+                    ),
+                  );
+                },
+                child: Text(
+                  "Click",
+                  style: btnHeight,
+                ),
+              ),
             ),
           ],
         ),
       ),
+    );
+    // );
+  }
+}
+
+class buttonPlusminus extends StatelessWidget {
+  buttonPlusminus(
+      {Key? key, required this.iconPlusminus, required this.onPress});
+
+  final IconData iconPlusminus;
+  final VoidCallback onPress;
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      fillColor: activeColor,
+      onPressed: onPress,
+      constraints: BoxConstraints.tightFor(
+        width: 44.0,
+        height: 44.0,
+      ),
+      child: Icon(iconPlusminus),
     );
   }
 }
@@ -129,7 +296,7 @@ class iconwidget extends StatelessWidget {
         SizedBox(
           height: 15.0,
         ),
-        Text(iconlabel, style: labelTextStyle),
+        Text(iconlabel, style: btnHeight),
       ],
     );
   }
@@ -146,7 +313,10 @@ class reusableContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(15),
-      color: backGroundColor,
+      decoration: BoxDecoration(
+        color: backGroundColor,
+        borderRadius: BorderRadius.circular(15.0),
+      ),
       child: cardChild,
     );
   }
